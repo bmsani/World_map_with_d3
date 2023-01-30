@@ -1,11 +1,13 @@
-import { csv } from 'd3';
+import { json } from 'd3';
 import { useEffect, useState } from 'react';
+import * as topojson from "topojson-client";
 
-const csvUrl = 'https://gist.githubusercontent.com/curran/90240a6d88bdb1411467b21ea0769029/raw/7d4c3914cc6a29a7f5165f7d5d82b735d97bcfe4/week_temperature_sf.csv'
+const jsonUrl = 'https://unpkg.com/world-atlas@2.0.2/countries-50m.json'
 
 const useData = () => {
-    
-    const [data, setData] = useState(null)
+  
+  const [data, setData] = useState(null)
+  console.log(data);
     
         useEffect(() => {
           const row = d => {
@@ -17,7 +19,11 @@ const useData = () => {
             d.timestamp = new Date(d.timestamp);
             return d;
           }
-          csv(csvUrl, row).then(setData)
+          json(jsonUrl, row).then(topojsonData => {
+            console.log(topojsonData);
+            const cngData = topojson.feature(topojsonData, topojsonData.objects.countries)
+            setData(cngData)
+          })
 
           // csv(csvUrl).then(data => {
           //   data.map(d => {

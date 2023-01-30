@@ -1,23 +1,17 @@
 import React from 'react';
-import { curveNatural, line } from 'd3';
+import { geoEqualEarth, geoPath } from 'd3';
 
-const Bars = ({ data, xScale, yScale, xValue, yValue, tooltipFormat }) => {
+const projection = geoEqualEarth();
+const path = geoPath(projection)
+
+const Bars = ({ data}) => {
   return (
     <g className='bars'>
-      <path
-        d={line()
-          .x(d => xScale(xValue(d)))
-          .y(d => yScale(yValue(d)))
-          .curve(curveNatural)(data)} />
-      {/* {data.map(d =>
-        <circle
-          cx={xScale(xValue(d))}
-          cy={yScale(yValue(d))}
-          r={3}
-        >
-          <title>{tooltipFormat(xValue(d))}</title>
-        </circle>
-        )} */}
+      
+      {data.features.map(feature =>
+        (
+          <path d ={path(feature)} />
+        ))}
     </g>
   );
 };
